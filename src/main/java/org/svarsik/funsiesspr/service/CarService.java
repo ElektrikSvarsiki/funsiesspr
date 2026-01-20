@@ -9,6 +9,7 @@ import org.svarsik.funsiesspr.exceptions.CarNotFoundException;
 import org.svarsik.funsiesspr.model.Car;
 import org.svarsik.funsiesspr.repository.CarRepository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -19,14 +20,14 @@ public class CarService {
         // create = all fields required
         car.setBrand(req.brand());
         car.setModel(req.model());
-        car.setYear(req.year());
+        car.setProductionYear(req.productionYear());
     }
 
     private void apply(UpdateCarRequest req, Car car) {
 
          car.setBrand(req.brand());
          car.setModel(req.model());
-        car.setYear(req.year());
+        car.setProductionYear(req.year());
     }
 
     private final CarRepository carRepository;
@@ -35,14 +36,20 @@ public class CarService {
         this.carRepository = carRepository;
     }
 
+
+    public List<CarResponse> getAllCars() {
+        List<Car> cars = carRepository.findAll();
+        List<CarResponse> responses = cars.stream()
+                .map(car -> new CarResponse(car.getId(), car.getBrand(), car.getModel(), car.getproductionYear()))
+                .toList();
+
+        return responses;
+    }
+
     public Car getCarById(long id) {
         return carRepository.findById(id)
                 .orElseThrow(() -> new CarNotFoundException(id));
     }
-
-
-
-
 
 
     public CarResponse addCar(CreateCarRequest request) {
@@ -51,10 +58,11 @@ public class CarService {
             throw new IllegalArgumentException("Brand and model are required");
         }
 
+
         Car car = new Car();
         car.setBrand(request.brand());
         car.setModel(request.model());
-        car.setYear(request.year());
+        car.setProductionYear(request.productionYear());
 
         Car saved = carRepository.save(car);
 
@@ -63,7 +71,7 @@ public class CarService {
                 saved.getId(),
                 saved.getBrand(),
                 saved.getModel(),
-                saved.getYear()
+                saved.getproductionYear()
         );
     }
 
@@ -80,7 +88,9 @@ public class CarService {
         Car car = carRepository.findById(id)
                 .orElseThrow(() -> new CarNotFoundException(id));
 
+
         apply(req, car);
+
 
 
         Car saved =  carRepository.save(car);
@@ -89,7 +99,7 @@ public class CarService {
                 saved.getId(),
                 saved.getBrand(),
                 saved.getModel(),
-                saved.getYear()
+                saved.getproductionYear()
         );
 
     }

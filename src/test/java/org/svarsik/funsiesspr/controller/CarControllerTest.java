@@ -55,8 +55,7 @@ public class CarControllerTest {
                 .andExpect(jsonPath("$.id").value(1))
                 .andExpect(jsonPath("$.brand").value("BMW"))
                 .andExpect(jsonPath("$.model").value("X5"))
-                .andExpect(jsonPath("$.year").value(2020))
-        ;
+                .andExpect(jsonPath("$.year").value(2020));
 
         verify(carService).getCarById(1L);
 
@@ -83,6 +82,7 @@ public class CarControllerTest {
 
         var req = MockMvcRequestBuilders.post("/").contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(car));
 
+
         mockMvc.perform(req).andExpect(status().isCreated())
                 .andExpect(jsonPath("$.id").value(1))
                 .andExpect(jsonPath("$.brand").value("BMW"))
@@ -93,4 +93,5 @@ public class CarControllerTest {
         verify(carService).addCar(car);
 
     }
+
 }

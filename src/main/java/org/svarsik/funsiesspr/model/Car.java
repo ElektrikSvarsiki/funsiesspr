@@ -21,6 +21,9 @@ public class Car {
     private String model;
 
 
-    private int year;
+    private int productionYear;
 
+    public int getproductionYear() {
+        return productionYear;
+    }
 }

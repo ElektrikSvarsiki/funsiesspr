@@ -36,6 +36,8 @@ dependencies {
 
     runtimeOnly 'com.h2database:h2:2.4.240'
 
+    implementation 'org.postgresql:postgresql:42.7.8'
+
 
     testImplementation 'com.h2database:h2:2.4.240'
 

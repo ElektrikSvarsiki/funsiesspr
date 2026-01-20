@@ -5,18 +5,31 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.svarsik.funsiesspr.configuration.CarLogger;
 import org.svarsik.funsiesspr.dto.CarResponse;
 import org.svarsik.funsiesspr.dto.CreateCarRequest;
 import org.svarsik.funsiesspr.dto.UpdateCarRequest;
 import org.svarsik.funsiesspr.model.Car;
 import org.svarsik.funsiesspr.service.CarService;
 
+import java.util.List;
+
 @RestController
 public class CarController {
 
     private final CarService carService;
-    public CarController(CarService carService) {
+    private final CarLogger carLogger;
+    public CarController(CarService carService, CarLogger carLogger) {
         this.carService = carService;
+        this.carLogger = carLogger;
+    }
+
+
+    @GetMapping
+    public ResponseEntity<List<CarResponse>> getAllCars() {
+        List<CarResponse> cars = carService.getAllCars();
+        carLogger.log(cars);
+        return ResponseEntity.ok(cars);
     }
 
     @GetMapping("/{id}")
@@ -27,10 +40,12 @@ public class CarController {
                 car.getId(),
                 car.getBrand(),
                 car.getModel(),
-                car.getYear()
+                car.getproductionYear()
         );
+        System.out.println(carService.hashCode());
 
         return ResponseEntity.ok(response);
+
     }
 
 
@@ -49,6 +64,8 @@ public class CarController {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(savedCar);
+
+
     }
 
     @PutMapping("/{id}")

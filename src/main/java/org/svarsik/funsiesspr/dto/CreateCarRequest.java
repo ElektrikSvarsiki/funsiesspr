@@ -14,5 +14,5 @@ public record CreateCarRequest(
 
         @Min(1886)
         @Max(2100)
-        int year
+        int productionYear
 ) {}

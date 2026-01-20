@@ -154,7 +154,6 @@ public class CarServiceTest {
         verify(carRepository, never()).save(any(Car.class));
     }
 
-
     @Test
     void getCarByIdTest(){
         Car car = new Car();
